@@ -14,8 +14,7 @@ const ProductPage = () => {
   const { productId } = useParams();
   const product = useSelector((state) => state.reducer.product);
   const productError = useSelector((state) => state.reducer.productError);
-  const sizes = useSelector((state) => state.reducer.sizes);
-  const size = useSelector((state) => state.reducer.size);
+
   const colors = useSelector((state) => state.reducer.colors);
 
   useEffect(() => {
