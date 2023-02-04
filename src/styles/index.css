@@ -16,6 +16,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.linkList {
+  color: black;
+  text-decoration: none;
+}
+.linkList:hover {
+  color: black;
+  text-decoration: none;
+}
 
 .app-container {
   min-height: 100vh;

@@ -1,25 +1,34 @@
 import { useParams } from 'react-router-dom';
 import { getProduct, getSizes } from '../api';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Error from './error';
 import MySwiper from './mySwiper';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setColors,
+  setProduct,
+  setProductError,
+  setSize,
+  setSizes,
+} from '../../store/stateSlice';
 
 const ProductPage = () => {
+  const dispatch = useDispatch();
   const { productId } = useParams();
-  const [product, setProduct] = useState(null);
-  const [productError, setProductError] = useState(null);
-  const [sizes, setSizes] = useState([]);
-  const [size, setSize] = useState('');
-  const [colors, setColors] = useState(1);
+  const product = useSelector((state) => state.reducer.product);
+  const productError = useSelector((state) => state.reducer.productError);
+  const sizes = useSelector((state) => state.reducer.sizes);
+  const size = useSelector((state) => state.reducer.size);
+  const colors = useSelector((state) => state.reducer.colors);
 
   useEffect(() => {
     getProduct(productId)
-      .then((data) => setProduct(data))
-      .catch((e) => setProductError(e.message));
-  }, [productId]);
+      .then((data) => dispatch(setProduct(data)))
+      .catch((e) => dispatch(setProductError(e.message)));
+  }, []);
   useEffect(() => {
-    getSizes().then((data) => setSizes(data));
+    getSizes().then((data) => dispatch(setSizes(data)));
   }, []);
 
   return productError ? (
@@ -45,7 +54,7 @@ const ProductPage = () => {
             className="form-select my-select my-2"
             aria-label="Default select example"
             value={colors}
-            onChange={(e) => setColors(e.target.value)}
+            onChange={(e) => dispatch(setColors(e.target.value))}
           >
             {product.colors.map((color) => {
               return (
@@ -60,7 +69,7 @@ const ProductPage = () => {
             className="form-select my-select my-2"
             aria-label="Default select example"
             value={size}
-            onChange={(e) => setSize(e.target.value)}
+            onChange={(e) => dispatch(setSize(e.target.value))}
           >
             {product.colors[colors - 1].sizes.length !== 0 ? (
               sizes.map((size) =>

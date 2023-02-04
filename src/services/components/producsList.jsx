@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getProducts } from '../api';
+import { useDispatch, useSelector } from 'react-redux';
+import { setProducts } from '../../store/stateSlice';
 
 const ProductsList = () => {
-  const [products, setProducts] = useState(null);
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.reducer.products);
   useEffect(() => {
-    getProducts().then((products) => setProducts(products));
+    getProducts().then((products) => dispatch(setProducts(products)));
   }, []);
   return products ? (
     <div className="px-2 py-4 flex-fill">
@@ -13,25 +16,25 @@ const ProductsList = () => {
       <div className="d-flex flex-wrap">
         {products.map((product) => {
           return (
-            <div
-              key={`${product.name}_${product.id}`}
-              className="card m-2"
-              style={{ width: 150 }}
-            >
-              <img
-                src={product.colors[0].images[0]}
-                className="card-img-top"
-                alt={`Зображення ${product.name}`}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{product.name}</h5>
-                <p className="card-text">Опис товару</p>
+            <Link className="linkList" to={`/${product.id}`}>
+              <div
+                key={`${product.name}_${product.id}`}
+                className="card m-2"
+                style={{ width: 150 }}
+              >
+                <img
+                  src={product.colors[0].images[0]}
+                  className="card-img-top"
+                  alt={`Зображення ${product.name}`}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{product.name}</h5>
+                  <p className="card-text">Опис товару</p>
 
-                <Link className="btn btn-primary" to={`/${product.id}`}>
-                  Детальніше
-                </Link>
+                  <button className="btn btn-primary">Детальніше</button>
+                </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
