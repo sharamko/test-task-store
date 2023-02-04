@@ -5,13 +5,9 @@ import { Link } from 'react-router-dom';
 import Error from './error';
 import MySwiper from './mySwiper';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setColors,
-  setProduct,
-  setProductError,
-  setSize,
-  setSizes,
-} from '../../store/stateSlice';
+import { setProduct, setProductError, setSizes } from '../../store/stateSlice';
+import SelectColor from './selectColor';
+import SelectSize from './selectSize';
 
 const ProductPage = () => {
   const dispatch = useDispatch();
@@ -50,39 +46,9 @@ const ProductPage = () => {
         </div>
         <div className="product-right">
           <h6 className="mt-4">Виберіть колір із доступних:</h6>
-          <select
-            className="form-select my-select my-2"
-            aria-label="Default select example"
-            value={colors}
-            onChange={(e) => dispatch(setColors(e.target.value))}
-          >
-            {product.colors.map((color) => {
-              return (
-                <option key={`${color.name}_${color.id}`} value={color.id}>
-                  {color.name}
-                </option>
-              );
-            })}
-          </select>
+          <SelectColor />
           <h6 className="mt-4">Виберіть розмір із доступних:</h6>
-          <select
-            className="form-select my-select my-2"
-            aria-label="Default select example"
-            value={size}
-            onChange={(e) => dispatch(setSize(e.target.value))}
-          >
-            {product.colors[colors - 1].sizes.length !== 0 ? (
-              sizes.map((size) =>
-                product.colors[colors - 1].sizes.includes(size.id) ? (
-                  <option key={`${size.label}_${size.id}`} value={size.id}>
-                    {size.label}
-                  </option>
-                ) : null
-              )
-            ) : (
-              <option>Немає розмірів</option>
-            )}
-          </select>
+          <SelectSize />
           <p className="my-4">Ціна: {product.colors[colors - 1].price}</p>
           <button
             disabled={product.colors[colors - 1].sizes.length === 0}
